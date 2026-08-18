@@ -25,8 +25,13 @@ def pull_arm(true_values, action, rng):
     """
     return true_values[action] + rng.normal()
 
-# Step 3 - sample_average_update (not yet solved)
-# TODO: implement
+# Step 3 - sample_average_update
+def sample_average_update(q_values, action_counts, action, reward):
+    q_values_c = q_values.copy()
+    action_counts_c = action_counts.copy()
+    action_counts_c[action] += 1
+    q_values_c[action] += (reward - q_values_c[action]) / action_counts_c[action]
+    return q_values_c, action_counts_c
 
 # Step 4 - epsilon_greedy_action (not yet solved)
 # TODO: implement
