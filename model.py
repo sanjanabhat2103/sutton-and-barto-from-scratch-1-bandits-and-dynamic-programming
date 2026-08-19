@@ -199,8 +199,26 @@ def bandit_parameter_study(n_runs, n_steps, seed, settings):
         results[label] = float(np.mean(final_rewards))
     return results
 
-# Step 14 - build_gridworld_mdp (not yet solved)
-# TODO: implement
+# Step 14 - build_gridworld_mdp
+def build_gridworld_mdp():
+    n_states = 16
+    n_actions = 4
+    deltas = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+    P = []
+    for s in range(n_states):
+        state_transitions = []
+        for a in range(n_actions):
+            if s == 0 or s == 15:
+                state_transitions.append([(1.0, s, 0.0)])
+            else:
+                row, col = divmod(s, 4)
+                dr, dc = deltas[a]
+                next_row = max(0, min(3, row + dr))
+                next_col = max(0, min(3, col + dc))
+                next_s = next_row * 4 + next_col
+                state_transitions.append([(1.0, next_s, -1.0)])
+        P.append(state_transitions)
+    return {"n_states": n_states, "n_actions": n_actions, "P": P}
 
 # Step 15 - iterative_policy_evaluation (not yet solved)
 # TODO: implement
