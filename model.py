@@ -112,8 +112,25 @@ def constant_step_size_update(q_values, action, reward, alpha):
 def optimistic_initialization(k, initial_value):
     return np.full(k, initial_value)
 
-# Step 11 - ucb_action_select (not yet solved)
-# TODO: implement
+# Step 11 - ucb_action_select
+def ucb_action_select(q_values, action_counts, timestep, c):
+    """Select an action by upper-confidence-bound scores.
+
+    Args:
+        q_values (np.ndarray): Action-value estimates, shape (k,).
+        action_counts (np.ndarray): Visit counts per action, shape (k,).
+        timestep (int): Current time step t (>= 1).
+        c (float): Exploration constant.
+
+    Returns:
+        int: Index of the selected action.
+    """
+    k = len(q_values)
+    scores = np.zeros(k)
+    visited = action_counts > 0
+    scores[visited] = (q_values[visited] + c * np.sqrt(np.log(timestep) / action_counts[visited]))
+    scores[action_counts == 0] = np.inf
+    return int(np.argmax(scores))
 
 # Step 12 - gradient_bandit_update (not yet solved)
 # TODO: implement
