@@ -132,8 +132,14 @@ def ucb_action_select(q_values, action_counts, timestep, c):
     scores[action_counts == 0] = np.inf
     return int(np.argmax(scores))
 
-# Step 12 - gradient_bandit_update (not yet solved)
-# TODO: implement
+# Step 12 - gradient_bandit_update
+def gradient_bandit_update(preferences, action, reward, average_reward, alpha):
+    e = np.exp(preferences - np.max(preferences))
+    pi = e / np.sum(e)
+    adv = reward - average_reward
+    preferences -= alpha * adv * pi
+    preferences[action] += alpha * adv
+    return preferences
 
 # Step 13 - bandit_parameter_study (not yet solved)
 # TODO: implement
