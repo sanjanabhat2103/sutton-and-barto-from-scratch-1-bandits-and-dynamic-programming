@@ -98,8 +98,10 @@ def average_bandit_curves(k, n_runs, n_steps, epsilon, seed):
     mean_optimal_fraction = optimal_all.mean(axis = 0)
     return mean_rewards, mean_optimal_fraction
 
-# Step 8 - apply_random_walk_drift (not yet solved)
-# TODO: implement
+# Step 8 - apply_random_walk_drift
+def apply_random_walk_drift(true_values, drift_std, rng):
+    noise = rng.normal(loc = 0, scale = drift_std, size = true_values.shape)
+    return true_values + noise
 
 # Step 9 - constant_step_size_update (not yet solved)
 # TODO: implement
