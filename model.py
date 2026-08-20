@@ -365,6 +365,41 @@ def gambler_value_iteration(goal, head_prob, theta, gamma=1.0):
             break
     return state_values
 
-# Step 21 - extract_optimal_stakes (not yet solved)
-# TODO: implement
+# Step 21 - extract_optimal_stakes
+def extract_optimal_stakes(state_values, goal, head_prob, gamma=1.0):
+    """Extract the optimal stake for every capital level from V.
+
+    Parameters
+    ----------
+    state_values : np.ndarray, shape (goal + 1,)
+        Converged state values for capitals 0 .. goal.
+    goal : int
+        Capital target.
+    head_prob : float
+        Probability the coin lands heads.
+    gamma : float, optional
+        Discount factor (default 1.0).
+
+    Returns
+    -------
+    stakes : np.ndarray, shape (goal + 1,), dtype int
+        stakes[s] is an optimal stake for capital s (0 at terminals).
+        Ties are broken by choosing the smallest stake.
+    """
+    stakes = np.zeros(goal + 1, dtype = int)
+    for s in range(1, goal):
+        max_stake = min(s, goal - s)
+        best_stake = 1
+        best_value = -np.inf
+        for stake in range(1, max_stake + 1):
+            win_state = s + stake
+            lose_state = s - stake
+            win_value = ((1.0 if win_state == goal else 0.0) + gamma * state_values[win_state])
+            lose_value = gamma * state_values[lose_state]
+            value = (head_prob * win_value + (1.0 - head_prob) * lose_value)
+            if value > best_value:
+                best_value = value
+                best_stake = stake
+        stakes[s] = best_stake
+    return stakes
 
